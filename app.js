@@ -11,14 +11,11 @@ const PORT = 8080
 
 app.use(cors())
 
-app.get('/', (req, res, next) => {
-	res.status(200).sendFile(path.join(__dirname, 'public', 'index.html'))
-})
+app.get('/', (req, res, next) => res.status(200).sendFile(path.join(__dirname, 'public', 'index.html')))
 
 app.post('/', async (req, res, next) => {
 	try {
-		const data = JSON.parse(await readFile('./data.json'))
-		res.status(200).json(data)
+		res.status(200).json(JSON.parse(await readFile('./data.json')))
 	} catch (error) {
 		next(error)
 	}
@@ -29,6 +26,4 @@ app.use((err, req, res, next) => {
 	res.status(err.statusCode || 500).json({ err: err })
 })
 
-app.listen(PORT, cb => {
-	console.log(`Server started!\nhttp://localhost:${PORT}`)
-})
+app.listen(PORT, cb => console.log(`Server started!\nhttp://localhost:${PORT}`))

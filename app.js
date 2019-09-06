@@ -11,8 +11,6 @@ const PORT = 8080
 
 app.use(cors())
 
-app.get('/', (req, res, next) => res.status(200).sendFile(path.join(__dirname, 'public', 'index.html')))
-
 app.post('/', async (req, res, next) => {
 	try {
 		res.status(200).json(JSON.parse(await readFile('./data.json')))
@@ -20,6 +18,8 @@ app.post('/', async (req, res, next) => {
 		next(error)
 	}
 })
+
+app.use('/', (req, res, next) => res.status(200).sendFile(path.join(__dirname, 'public', 'index.html')))
 
 app.use((err, req, res, next) => {
 	console.log(`[${getTime()}][errorMiddleware]: ${err}`)

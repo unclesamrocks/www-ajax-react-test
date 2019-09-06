@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<title>Document</title>
+		<style>
+			table {
+				border-collapse: collapse;
+				border: 1px solid black;
+			}
+			thead tr {
+				font-weight: 600;
+				text-transform: uppercase;
+				text-align: center;
+			}
+			td {
+				border: 1px solid black;
+				padding: 7px;
+			}
+			div {
+				font-weight: 600;
+				font-size: 18px;
+			}
+			div:first-child {
+				margin-top: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<button id="butt">start</button>
+		<script>
+			const button = document.querySelector('#butt')
+			button.addEventListener('click', async e => {
+				try {
+					const res = await (await fetch('http://localhost:8080', { method: 'POST' })).json()
+					document.querySelector('body').innerHTML = `
+						<div>Используя React получите json методом POST по адресу http://localhost:8080 и выведите список, как показано ниже.</div>
+						<br>
+						<div>Условия:</div>
+						<div>- пагинация, по 10 элементов на страницу;</div>
+						<div>- добавить возможность удаления строки;</div>
+						<br>
+						<div>- стили не имеют значения;</div>
+						<div>- можно применять любые дополнительные библиотеки.</div>
+						<br>
+						<br>
+                        <table>
+                            <thead>
+                                    <tr>
+                                        <td>title</td>    
+                                        <td>sku</td>    
+                                        <td>price</td>    
+                                        <td>category</td>    
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                ${res
+									.map(v => {
+										return `<tr>
+												<td>${v.title}</td>    
+												<td>${v.sku}</td>    
+												<td>${v.price}</td>    
+												<td>${v.categoryTitle}</td>    
+											</tr>
+                    						`
+									})
+									.join('')}
+                            </tbody>  
+                        </table>
+                    `
+				} catch (error) {
+					console.log(`[Button Event Listener] ${error}`)
+				}
+			})
+		</script>
+	</body>
+</html>

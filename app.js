@@ -11,19 +11,21 @@ const PORT = 8080
 
 app.use(cors())
 
-app.post('/', async (req, res, next) => {
-	try {
-		res.status(200).json(JSON.parse(await readFile('./data.json')))
-	} catch (error) {
-		next(error)
-	}
+app.post('/', (req, res, next) => {
+	setTimeout(async () => {
+		try {
+			res.status(200).json(JSON.parse(await readFile('./data.json')))
+		} catch (error) {
+			next(error)
+		}
+	}, Math.floor(Math.random() * 4) * 500)
 })
 
 app.use('/', (req, res, next) => res.status(200).sendFile(path.join(__dirname, 'public', 'index.html')))
 
 app.use((err, req, res, next) => {
 	console.log(`[${getTime()}][errorMiddleware]: ${err}`)
-	res.status(err.statusCode || 500).json({ err: err })
+	res.status(err.statusCode || 500).json({ msg: 'Internal Server Error' })
 })
 
 app.listen(PORT, cb => console.log(`Server started!\nhttp://localhost:${PORT}`))
